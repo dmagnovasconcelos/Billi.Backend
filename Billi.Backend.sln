@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36109.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-Api", "01-Api", "{48C903EC-B5D0-4AF3-8C0B-0788F4648474}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-Presentation", "01-Presentation", "{48C903EC-B5D0-4AF3-8C0B-0788F4648474}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02-Application", "02-Application", "{3C8B890D-5F76-46F4-92DA-464EA1EBACE5}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billi.Backend.Domain", "src\03-Domain\Billi.Backend.Domain\Billi.Backend.Domain.csproj", "{EA485CF9-DFD6-4E37-89C9-B433BF353B7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billi.Backend.Infra.Data", "src\04-Infra\Billi.Backend.Infra.Data\Billi.Backend.Infra.Data.csproj", "{99773C72-1366-4E4D-BE90-593EF7257201}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billi.Backend.Application", "src\02-Application\Billi.Backend.Application\Billi.Backend.Application.csproj", "{7FE4FD0C-DC25-4DB0-9126-0A12F50366BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{99773C72-1366-4E4D-BE90-593EF7257201}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99773C72-1366-4E4D-BE90-593EF7257201}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99773C72-1366-4E4D-BE90-593EF7257201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FE4FD0C-DC25-4DB0-9126-0A12F50366BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FE4FD0C-DC25-4DB0-9126-0A12F50366BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FE4FD0C-DC25-4DB0-9126-0A12F50366BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FE4FD0C-DC25-4DB0-9126-0A12F50366BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 		{AA75F264-BA6F-48D3-B86A-DFAE7A8FF494} = {5FBB35DB-BCA1-4A22-A464-EF3E3FD7B6B6}
 		{EA485CF9-DFD6-4E37-89C9-B433BF353B7A} = {74D79228-DC44-464F-B37D-AC626DDB2D0B}
 		{99773C72-1366-4E4D-BE90-593EF7257201} = {55DC4715-6584-4F20-9EE9-4598349FD35A}
+		{7FE4FD0C-DC25-4DB0-9126-0A12F50366BC} = {3C8B890D-5F76-46F4-92DA-464EA1EBACE5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC0F9CD1-56CD-4B04-A0CA-95E7AB122FA0}

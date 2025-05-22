@@ -3,8 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\Users\" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\03-Domain\Billi.Backend.Domain\Billi.Backend.Domain.csproj" />

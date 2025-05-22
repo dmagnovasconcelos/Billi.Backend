@@ -3,9 +3,8 @@ using Billi.Backend.CrossCutting.Enums;
 
 namespace Billi.Backend.Domain.Entities
 {
-    public class UserEntity : DeletableBaseEntity
+    public class UserEntity : SoftDeleteBaseEntity
     {
-        public string NickName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public StatusType Status { get; set; }

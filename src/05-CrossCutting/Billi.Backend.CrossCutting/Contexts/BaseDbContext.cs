@@ -1,31 +1,60 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Billi.Backend.CrossCutting.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Billi.Backend.CrossCutting.Contexts
 {
-    public class BaseDbContext(DbContextOptions<BaseDbContext> options) : DbContext(options)
+    public class BaseDbContext(DbContextOptions<BaseDbContext> options, Guid? usuarioId = null) : DbContext(options)
     {
-        private const string _messageExceptionLogicalDelete = "Use logical delete instead of Remove.";
-        private const string _messageExceptionSaveChanges = "Use SaveChangesAsync instead of SaveChanges.";
 
+        private const string _messageExceptionSaveChanges = "Use SaveChangesAsync instead of SaveChanges.";
+        
         public override EntityEntry Remove(object entity)
         {
-            throw new NotImplementedException(_messageExceptionLogicalDelete);
+            if (entity is SoftDeleteBaseEntity softDeleteBaseEntity)
+            {
+                EntityEntry<SoftDeleteBaseEntity> entityEntry = Entry(softDeleteBaseEntity);
+                entityEntry.Entity.IsDeleted = true;
+                entityEntry.Entity.DeletedAt = DateTime.Now;
+                entityEntry.Entity.DeletedBy = usuarioId ?? Guid.Empty;
+                entityEntry.State = EntityState.Modified;
+
+                return entityEntry;
+            }
+            else
+            {
+                return base.Remove(entity);
+            }
         }
 
         public override EntityEntry<TEntity> Remove<TEntity>(TEntity entity)
         {
-            throw new NotImplementedException(_messageExceptionLogicalDelete);
+            if (entity is SoftDeleteBaseEntity softDeleteBaseEntity)
+            {
+                EntityEntry<SoftDeleteBaseEntity> entityEntry = Entry(softDeleteBaseEntity);
+                entityEntry.Entity.IsDeleted = true;
+                entityEntry.Entity.DeletedAt = DateTime.Now;
+                entityEntry.Entity.DeletedBy = usuarioId ?? Guid.Empty;
+                entityEntry.State = EntityState.Modified;
+                
+                return entityEntry as EntityEntry<TEntity>;
+            }
+            else
+            {
+                return base.Remove(entity);
+            }
         }
 
         public override void RemoveRange(params object[] entities)
         {
-            throw new NotImplementedException(_messageExceptionLogicalDelete);
+            foreach (var entity in entities)
+                Remove(entity);
         }
 
         public override void RemoveRange(IEnumerable<object> entities)
         {
-            throw new NotImplementedException(_messageExceptionLogicalDelete);
+            foreach (var entity in entities)
+                Remove(entity);
         }
 
         public override int SaveChanges()
@@ -38,9 +67,38 @@ namespace Billi.Backend.CrossCutting.Contexts
             throw new NotImplementedException(_messageExceptionSaveChanges);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return base.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await base.Database.BeginTransactionAsync(cancellationToken);
+                foreach (EntityEntry item in base.ChangeTracker.Entries())
+                {
+                    if (item.Entity is AuditableBaseEntity entity)
+                    {
+                        switch (item.State)
+                        {
+                            case EntityState.Added:
+                                entity.CreatedAt = DateTime.Now;
+                                entity.CreatedBy = usuarioId ?? Guid.Empty;
+                                break;
+                            case EntityState.Modified:
+                                entity.UpdatedAt = DateTime.Now;
+                                entity.UpdatedBy = usuarioId ?? Guid.Empty;
+                                break;
+                        }
+                    }
+                }
+
+                int ret = await base.SaveChangesAsync(cancellationToken);
+                await base.Database.CommitTransactionAsync(cancellationToken);
+                return ret;
+            }
+            catch
+            {
+                await base.Database.RollbackTransactionAsync(cancellationToken);
+                throw;
+            }
         }
     }
 }
