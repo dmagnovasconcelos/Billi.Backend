@@ -30,7 +30,7 @@ namespace Billi.Backend.Application.Commands.Auth
             try
             {
                 await unitOfWork.Start();
-                var user = await unitOfWork.Repository.GetAsync(x => x.Email.Equals(request.Email), x => x.Include(y => y.UserRefreshToken), cancellationToken);
+                var user = await unitOfWork.Repository.GetAsync(x => x.Email.Equals(request.Email, StringComparison.InvariantCultureIgnoreCase), x => x.Include(y => y.UserRefreshToken), cancellationToken);
                 if (user is null)
                     return AuthResponse.Unauthorized(ResponseUnauthorizedType.NotFound);
 
@@ -77,7 +77,7 @@ namespace Billi.Backend.Application.Commands.Auth
                 var session = await service.ValidateToken(request.Token, cancellationToken);
 
                 await unitOfWork.Start();
-                var user = await unitOfWork.Repository.GetAsync(x => x.Id.Equals(session.UserId) && x.Email.Equals(session.Email), x => x.Include(y => y.UserRefreshToken), cancellationToken);
+                var user = await unitOfWork.Repository.GetAsync(x => x.Id.Equals(session.UserId) && x.Email.Equals(session.Email, StringComparison.InvariantCultureIgnoreCase), x => x.Include(y => y.UserRefreshToken), cancellationToken);
                 if (user is null)
                     return AuthResponse.Unauthorized(ResponseUnauthorizedType.NotFound);
 
@@ -118,7 +118,7 @@ namespace Billi.Backend.Application.Commands.Auth
                 var session = new SessionAuth(request.Token);
 
                 await unitOfWork.Start();
-                var user = await unitOfWork.Repository.GetAsync(x => x.Id.Equals(session.UserId) && x.Email.Equals(session.Email), x => x.Include(y => y.UserRefreshToken).Include(y => y.UserRevokedTokens), cancellationToken);
+                var user = await unitOfWork.Repository.GetAsync(x => x.Id.Equals(session.UserId) && x.Email.Equals(session.Email, StringComparison.InvariantCultureIgnoreCase), x => x.Include(y => y.UserRefreshToken).Include(y => y.UserRevokedTokens), cancellationToken);
                 if (user is null)
                     return AuthResponse.Unauthorized(ResponseUnauthorizedType.NotFound);
 
@@ -134,7 +134,7 @@ namespace Billi.Backend.Application.Commands.Auth
 
                 await unitOfWork.CommitAsync();
 
-                return Response.SuccessResult("Revoked Token ", ResponseSuccessType.Accepted) as AuthResponse;
+                return Response.SuccessResult("Revoked Token", ResponseSuccessType.Accepted) as AuthResponse;
             }
             catch (Exception ex)
             {
