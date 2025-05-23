@@ -25,7 +25,7 @@ namespace Billi.Backend.CrossCutting.Responses
 
         public object Data { get; init; }
 
-        public string Message { get; }
+        public string Message { get; init; }
 
         [JsonIgnore]
         public ResponseFailureType ResponseFailure { get; }
@@ -35,7 +35,7 @@ namespace Billi.Backend.CrossCutting.Responses
 
         public bool Success { get; }
 
-        public static Response SuccessResult(string message, ResponseSuccessType typeOfResponseSuccess = ResponseSuccessType.Ok, object data = null)
+        public static Response SuccessResult(string message = null, ResponseSuccessType typeOfResponseSuccess = ResponseSuccessType.Ok, object data = null)
         {
             return new(true, message, typeOfResponseSuccess)
             {

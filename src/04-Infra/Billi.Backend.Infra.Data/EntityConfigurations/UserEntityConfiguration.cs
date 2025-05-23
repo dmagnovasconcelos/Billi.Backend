@@ -21,6 +21,16 @@ namespace Billi.Backend.Infra.Data.EntityConfigurations
                 .IsRequired()
                 .HasConversion(new EncryptedStringConverter(configuration))
                 .HasMaxLength(512);
+
+            builder.HasOne(x => x.UserRefreshToken)
+                .WithOne(x => x.User)
+                .HasForeignKey<UserRefreshTokenEntity>(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(x => x.UserRevokedTokens)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

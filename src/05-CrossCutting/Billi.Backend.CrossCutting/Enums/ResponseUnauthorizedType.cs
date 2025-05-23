@@ -14,6 +14,15 @@ namespace Billi.Backend.CrossCutting.Enums
         InactiveUser,
 
         [Description("Invalid password")]
-        InvalidPassword
+        InvalidPassword,
+
+        [Description("Invalid RefreshToken")]
+        InvalidRefreshToken,
+
+        [Description("Expired RefreshToken")]
+        ExpiredRefreshToken,
+
+        [Description("Revoked RefreshToken")]
+        RevokedRefreshToken
     }
 }

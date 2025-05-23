@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Billi.Backend.CrossCutting.UnitsOfWork
 {
-    public abstract class UnitOfWork<T>(BaseDbContext context) : IUnitOfWork where T : BaseEntity
+    public abstract class UnitOfWork<T>(BaseDbContext context) : IUnitOfWork<T> where T : BaseEntity
     {
         private IDbContextTransaction _currentTransaction;
 
         public IGenericCommandRepository<T> Repository { get; }
 
-        public async Task BeginTransactionAsync()
+        public async Task Start()
         {
             if (_currentTransaction != null)
                 return;

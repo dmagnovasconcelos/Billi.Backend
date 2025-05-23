@@ -9,10 +9,11 @@ namespace Billi.Backend.Domain.Entities
         public string Password { get; set; }
         public StatusType Status { get; set; }
         public bool RedefinePassword { get; set; }
-        public Guid? ValidationToken { get; set; }      
-        
+        public string ValidationResetPassword { get; set; }
         public Guid? PersonId { get; set; }
         public Guid? SupplierId { get; set; }
+        public UserRefreshTokenEntity UserRefreshToken { get; set; }
+        public IList<UserRevokedTokenEntity> UserRevokedTokens { get; set; }
         public bool IsSystemUser { get; private set; } = false;
     }
 }

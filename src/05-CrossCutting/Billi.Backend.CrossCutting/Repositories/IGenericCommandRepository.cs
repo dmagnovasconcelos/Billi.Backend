@@ -2,7 +2,7 @@
 
 namespace Billi.Backend.CrossCutting.Repositories
 {
-    public interface IGenericCommandRepository<T> where T : BaseEntity
+    public interface IGenericCommandRepository<T> : IGenericQueryRepository<T> where T : BaseEntity
     {
         Task AddAsync(T entity);
 

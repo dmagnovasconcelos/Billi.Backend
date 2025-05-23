@@ -10,7 +10,7 @@ namespace Billi.Backend.Application.Commands.Auth.Responses
             : base(success, message, responseSuccess) { }
         public AuthResponse(bool success, string message, ResponseFailureType responseFailure)
             : base(success, message, responseFailure) { }
-                
+
         public static AuthResponse Unauthorized(ResponseUnauthorizedType responseUnauthorized)
         {
             return new(false, responseUnauthorized.GetDescription().Description, ResponseFailureType.NotAuthorized);

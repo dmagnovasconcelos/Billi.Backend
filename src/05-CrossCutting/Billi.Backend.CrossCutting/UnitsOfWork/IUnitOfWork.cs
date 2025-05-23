@@ -1,8 +1,13 @@
-﻿namespace Billi.Backend.CrossCutting.UnitsOfWork
+﻿using Billi.Backend.CrossCutting.Entities;
+using Billi.Backend.CrossCutting.Repositories;
+
+namespace Billi.Backend.CrossCutting.UnitsOfWork
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork<T> : IDisposable where T : BaseEntity
     {
-        Task BeginTransactionAsync();
+        IGenericCommandRepository<T> Repository { get; }
+
+        Task Start();
         Task CommitAsync();
         Task RollbackAsync();
     }

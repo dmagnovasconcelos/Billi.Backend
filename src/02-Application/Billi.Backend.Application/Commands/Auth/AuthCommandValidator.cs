@@ -9,7 +9,8 @@ namespace Billi.Backend.Application.Commands.Auth
             RuleFor(x => x.Email)
                 .NotNull()
                 .NotEmpty()
-                .EmailAddress();
+                .EmailAddress()
+                .MaximumLength(150);
 
             RuleFor(x => x.Password)
                 .NotNull()

@@ -9,13 +9,18 @@ namespace Billi.Backend.CrossCutting.Utilities
         {
             try
             {
-                return enumValue.GetType().GetMember(enumValue.ToString()).First()
+                return enumValue.GetType().GetMember(enumValue.ToString()).FirstOrDefault()
                     .GetCustomAttribute<DescriptionAttribute>();
             }
             catch
             {
                 return null;
             }
+        }
+
+        public static bool IsExpired(this DateTime ExpiresAt)
+        {
+            return DateTime.UtcNow >= ExpiresAt;
         }
     }
 }

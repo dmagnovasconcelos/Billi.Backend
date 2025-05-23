@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Billi.Backend.CrossCutting.Contexts
 {
-    public class BaseDbContext(DbContextOptions<BaseDbContext> options, Guid? usuarioId = null) : DbContext(options)
+    public class BaseDbContext(DbContextOptions<BaseDbContext> options, Guid? userId = null) : DbContext(options)
     {
 
         private const string _messageExceptionSaveChanges = "Use SaveChangesAsync instead of SaveChanges.";
-        
+
         public override EntityEntry Remove(object entity)
         {
             if (entity is SoftDeleteBaseEntity softDeleteBaseEntity)
@@ -16,7 +16,7 @@ namespace Billi.Backend.CrossCutting.Contexts
                 EntityEntry<SoftDeleteBaseEntity> entityEntry = Entry(softDeleteBaseEntity);
                 entityEntry.Entity.IsDeleted = true;
                 entityEntry.Entity.DeletedAt = DateTime.Now;
-                entityEntry.Entity.DeletedBy = usuarioId ?? Guid.Empty;
+                entityEntry.Entity.DeletedBy = userId ?? Guid.Empty;
                 entityEntry.State = EntityState.Modified;
 
                 return entityEntry;
@@ -34,9 +34,9 @@ namespace Billi.Backend.CrossCutting.Contexts
                 EntityEntry<SoftDeleteBaseEntity> entityEntry = Entry(softDeleteBaseEntity);
                 entityEntry.Entity.IsDeleted = true;
                 entityEntry.Entity.DeletedAt = DateTime.Now;
-                entityEntry.Entity.DeletedBy = usuarioId ?? Guid.Empty;
+                entityEntry.Entity.DeletedBy = userId ?? Guid.Empty;
                 entityEntry.State = EntityState.Modified;
-                
+
                 return entityEntry as EntityEntry<TEntity>;
             }
             else
@@ -74,19 +74,15 @@ namespace Billi.Backend.CrossCutting.Contexts
                 await base.Database.BeginTransactionAsync(cancellationToken);
                 foreach (EntityEntry item in base.ChangeTracker.Entries())
                 {
-                    if (item.Entity is AuditableBaseEntity entity)
+                    if (item.State == EntityState.Added && item.Entity is BaseEntity baseEntity)
                     {
-                        switch (item.State)
-                        {
-                            case EntityState.Added:
-                                entity.CreatedAt = DateTime.Now;
-                                entity.CreatedBy = usuarioId ?? Guid.Empty;
-                                break;
-                            case EntityState.Modified:
-                                entity.UpdatedAt = DateTime.Now;
-                                entity.UpdatedBy = usuarioId ?? Guid.Empty;
-                                break;
-                        }
+                        baseEntity.CreatedAt = DateTime.UtcNow;
+                        baseEntity.CreatedBy = userId ?? Guid.Empty;
+                    }
+                    else if (item.State == EntityState.Modified && item.Entity is AuditableBaseEntity auditableBaseEntity)
+                    {
+                        auditableBaseEntity.UpdatedAt = DateTime.UtcNow;
+                        auditableBaseEntity.UpdatedBy = userId ?? Guid.Empty;
                     }
                 }
 

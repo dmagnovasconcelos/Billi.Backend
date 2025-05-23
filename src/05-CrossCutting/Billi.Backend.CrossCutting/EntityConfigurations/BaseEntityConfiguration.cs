@@ -11,6 +11,10 @@ namespace Billi.Backend.CrossCutting.EntityConfigurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+            builder.Property(x => x.CreatedAt).IsRequired();
+            builder.Property(x => x.CreatedBy).IsRequired();
+
         }
     }
 }

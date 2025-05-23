@@ -3,10 +3,10 @@ using MediatR;
 
 namespace Billi.Backend.Application.Commands.Auth
 {
-    public class AuthCommand : IRequest<AuthResponse>
+    public class AuthCommand(string email, string password) : IRequest<AuthResponse>
     {
-        public string Email { get; }
+        public string Email { get; } = email;
 
-        public string Password { get; }
+        public string Password { get; } = password;
     }
 }

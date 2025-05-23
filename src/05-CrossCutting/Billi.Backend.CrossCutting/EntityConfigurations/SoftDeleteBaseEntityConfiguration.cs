@@ -14,7 +14,7 @@ namespace Billi.Backend.CrossCutting.EntityConfigurations
             builder.Property(x => x.IsDeleted).IsRequired().HasDefaultValue(false);
             builder.HasIndex(x => x.IsDeleted).HasDatabaseName($"IX_{typeof(T).Name}_IsDeleted");
 
-            builder.HasQueryFilter(x => !x.IsDeleted); 
+            builder.HasQueryFilter(x => !x.IsDeleted);
         }
     }
 }

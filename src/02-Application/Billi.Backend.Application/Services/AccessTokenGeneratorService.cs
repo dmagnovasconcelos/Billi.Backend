@@ -12,13 +12,15 @@ namespace Billi.Backend.Application.Services
     {
         private readonly AuthenticationOptions _configuration = configuration.Value;
 
-        public AccessToken GenerateAccessToken(string email)
+        public AccessToken GenerateAccessToken(string email, Guid userId, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             ClaimsIdentity identity = new(
             new GenericIdentity(email, "E-mail"),
             [
-                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                  new Claim(JwtRegisteredClaimNames.UniqueName, email)
+                new Claim(JwtRegisteredClaimNames.Jti, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, email),
             ]);
 
             var created = DateTime.Now;
@@ -36,14 +38,31 @@ namespace Billi.Backend.Application.Services
             JwtSecurityTokenHandler tokenHandler = new();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var accessToken = tokenHandler.WriteToken(token);
-            var result = new AccessToken(accessToken, false, created, expiration);
+            var result = new AccessToken(accessToken, email, userId, false, created, expiration);
 
             return result;
         }
 
-        public AccessToken RefreshAccessToken(AccessToken accessToken)
+        public async Task<SessionAuth> ValidateToken(string token, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _configuration.SymmetricSecurityKey,
+                ValidateIssuer = true,
+                ValidIssuer = _configuration.Issuer,
+                ValidateAudience = true,
+                ValidAudience = _configuration.Audience,
+                ValidateLifetime = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            await tokenHandler.ValidateTokenAsync(token, tokenValidationParameters);
+
+            return new SessionAuth(token);
         }
     }
 }

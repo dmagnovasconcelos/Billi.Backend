@@ -1,13 +1,10 @@
 ﻿using Billi.Backend.CrossCutting.Contexts;
 using Billi.Backend.CrossCutting.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Billi.Backend.CrossCutting.Repositories
 {
-    public abstract class GenericCommandRepository<T>(BaseDbContext context) : IGenericCommandRepository<T> where T : BaseEntity
+    public abstract class GenericCommandRepository<T>(BaseDbContext context) : GenericQueryRepository<T>(context), IGenericCommandRepository<T> where T : BaseEntity
     {
-        private readonly DbSet<T> _dbSet = context.Set<T>();
-
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
@@ -35,7 +32,7 @@ namespace Billi.Backend.CrossCutting.Repositories
 
         public void UpdateRange(IEnumerable<T> entities)
         {
-           _dbSet.UpdateRange(entities);
+            _dbSet.UpdateRange(entities);
         }
     }
 }

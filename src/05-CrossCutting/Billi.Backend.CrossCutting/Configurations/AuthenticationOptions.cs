@@ -17,5 +17,13 @@ namespace Billi.Backend.CrossCutting.Configurations
                 return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecurityKey)), SecurityAlgorithms.HmacSha256);
             }
         }
+
+        public SymmetricSecurityKey SymmetricSecurityKey
+        {
+            get
+            {
+                return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecurityKey));
+            }
+        }
     }
 }

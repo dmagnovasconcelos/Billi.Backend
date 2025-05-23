@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\02-Application\Billi.Backend.Application\Billi.Backend.Application.csproj" />
+    <ProjectReference Include="..\..\03-Domain\Billi.Backend.Domain\Billi.Backend.Domain.csproj" />
+    <ProjectReference Include="..\..\05-CrossCutting\Billi.Backend.CrossCutting\Billi.Backend.CrossCutting.csproj" />
+    <ProjectReference Include="..\Billi.Backend.Infra.Data\Billi.Backend.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>
