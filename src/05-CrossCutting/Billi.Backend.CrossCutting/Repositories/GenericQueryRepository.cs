@@ -9,6 +9,11 @@ namespace Billi.Backend.CrossCutting.Repositories
     {
         protected readonly DbSet<T> _dbSet = context.Set<T>();
 
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken)
+        {
+            return await _dbSet.AnyAsync(filter, cancellationToken);
+        }
+
         public async Task<T> GetAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _dbSet.FindAsync([id], cancellationToken);

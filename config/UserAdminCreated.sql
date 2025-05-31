@@ -1,0 +1,3 @@
+INSERT INTO public."user"
+(id, email, "password", status, redefine_password, validation_reset_password, person_id, supplier_id, is_system_user, created_by, created_at, updated_by, updated_at, is_deleted, deleted_at, deleted_by)
+VALUES('4e6782cf-53ea-4d93-9fd7-ca506fee2871'::uuid, 'admin@admin.com', '7j0hVy9KhKAcwS9RDQ4+0w==', 1, false, NULL, NULL, NULL, true, '00000000-0000-0000-0000-000000000000'::uuid, '2025-05-23 00:00:00.000', '4e6782cf-53ea-4d93-9fd7-ca506fee2871'::uuid, '2025-05-31 10:47:22.773', false, NULL, NULL);

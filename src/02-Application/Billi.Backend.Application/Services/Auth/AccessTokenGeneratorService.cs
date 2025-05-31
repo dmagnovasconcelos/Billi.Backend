@@ -1,16 +1,19 @@
-﻿using Billi.Backend.CrossCutting.Configurations;
+﻿using Billi.Backend.Application.Services.Auth.Interfaces;
+using Billi.Backend.CrossCutting.Auth;
+using Billi.Backend.CrossCutting.Configurations;
 using Billi.Backend.Domain.ValueObjects;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace Billi.Backend.Application.Services
+namespace Billi.Backend.Application.Services.Auth
 {
-    public class AccessTokenGeneratorService(IOptions<AuthenticationOptions> configuration) : IAccessTokenGeneratorService
+    public class AccessTokenGeneratorService(IOptions<AuthenticationSettings> authConfiguration, IHttpContextAccessor httpContextAccessor) : IAccessTokenGeneratorService
     {
-        private readonly AuthenticationOptions _configuration = configuration.Value;
+        private readonly AuthenticationSettings _authConfiguration = authConfiguration.Value;
 
         public AccessToken GenerateAccessToken(string email, Guid userId, CancellationToken cancellationToken)
         {
@@ -24,14 +27,14 @@ namespace Billi.Backend.Application.Services
             ]);
 
             var created = DateTime.Now;
-            var expiration = created.AddMinutes(_configuration.Expiration);
+            var expiration = created.AddHours(_authConfiguration.Expiration);
             SecurityTokenDescriptor tokenDescriptor = new()
             {
-                Issuer = _configuration.Issuer,
-                Audience = _configuration.Audience,
+                Issuer = _authConfiguration.Issuer,
+                Audience = _authConfiguration.Audience,
                 NotBefore = created,
                 Expires = expiration,
-                SigningCredentials = _configuration.SigningCredentials,
+                SigningCredentials = _authConfiguration.SigningCredentials,
                 Subject = identity
             };
 
@@ -43,18 +46,18 @@ namespace Billi.Backend.Application.Services
             return result;
         }
 
-        public async Task<SessionAuth> ValidateToken(string token, CancellationToken cancellationToken)
+        public async Task<CurrentUser> ValidateToken(string token, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = _configuration.SymmetricSecurityKey,
+                IssuerSigningKey = _authConfiguration.SymmetricSecurityKey,
                 ValidateIssuer = true,
-                ValidIssuer = _configuration.Issuer,
+                ValidIssuer = _authConfiguration.Issuer,
                 ValidateAudience = true,
-                ValidAudience = _configuration.Audience,
+                ValidAudience = _authConfiguration.Audience,
                 ValidateLifetime = false
             };
 
@@ -62,7 +65,7 @@ namespace Billi.Backend.Application.Services
 
             await tokenHandler.ValidateTokenAsync(token, tokenValidationParameters);
 
-            return new SessionAuth(token);
+            return CurrentUser.GetSessionAuth(token, httpContextAccessor);
         }
     }
 }

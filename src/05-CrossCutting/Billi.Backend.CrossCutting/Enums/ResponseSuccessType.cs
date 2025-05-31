@@ -2,7 +2,7 @@
 {
     public enum ResponseSuccessType
     {
-        Ok,
+        Success,
         Created,
         Accepted,
         NoContent

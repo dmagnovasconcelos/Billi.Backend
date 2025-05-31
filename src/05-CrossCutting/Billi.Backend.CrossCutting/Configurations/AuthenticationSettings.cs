@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Billi.Backend.CrossCutting.Configurations
 {
-    public class AuthenticationOptions
+    public class AuthenticationSettings
     {
         public string Audience { get; set; }
         public int Expiration { get; set; }

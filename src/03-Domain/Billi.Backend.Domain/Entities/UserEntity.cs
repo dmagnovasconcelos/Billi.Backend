@@ -13,7 +13,6 @@ namespace Billi.Backend.Domain.Entities
         public Guid? PersonId { get; set; }
         public Guid? SupplierId { get; set; }
         public UserRefreshTokenEntity UserRefreshToken { get; set; }
-        public IList<UserRevokedTokenEntity> UserRevokedTokens { get; set; }
         public bool IsSystemUser { get; private set; } = false;
     }
 }

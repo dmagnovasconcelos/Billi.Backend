@@ -2,7 +2,7 @@
 {
     public enum ResponseFailureType
     {
-        Null,
+        Unsuccesss,
         InvalidCommand,
         NotAuthorized,
         Error,

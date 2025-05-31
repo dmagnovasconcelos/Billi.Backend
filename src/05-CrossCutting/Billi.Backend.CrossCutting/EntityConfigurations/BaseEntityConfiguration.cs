@@ -14,7 +14,6 @@ namespace Billi.Backend.CrossCutting.EntityConfigurations
 
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.CreatedBy).IsRequired();
-
         }
     }
 }

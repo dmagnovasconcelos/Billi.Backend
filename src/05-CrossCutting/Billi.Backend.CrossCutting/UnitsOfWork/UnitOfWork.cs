@@ -1,15 +1,11 @@
 ﻿using Billi.Backend.CrossCutting.Contexts;
-using Billi.Backend.CrossCutting.Entities;
-using Billi.Backend.CrossCutting.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Billi.Backend.CrossCutting.UnitsOfWork
 {
-    public abstract class UnitOfWork<T>(BaseDbContext context) : IUnitOfWork<T> where T : BaseEntity
+    public abstract class UnitOfWork(BaseDbContext context) : IUnitOfWork
     {
         private IDbContextTransaction _currentTransaction;
-
-        public IGenericCommandRepository<T> Repository { get; }
 
         public async Task Start()
         {

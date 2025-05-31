@@ -12,7 +12,7 @@ namespace Billi.Backend.CrossCutting.EntityConfigurations
             base.Configure(builder);
 
             builder.Property(x => x.IsDeleted).IsRequired().HasDefaultValue(false);
-            builder.HasIndex(x => x.IsDeleted).HasDatabaseName($"IX_{typeof(T).Name}_IsDeleted");
+            builder.HasIndex(x => x.IsDeleted);
 
             builder.HasQueryFilter(x => !x.IsDeleted);
         }

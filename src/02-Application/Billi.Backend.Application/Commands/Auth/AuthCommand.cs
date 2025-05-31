@@ -1,9 +1,9 @@
-﻿using Billi.Backend.Application.Commands.Auth.Responses;
+﻿using Billi.Backend.CrossCutting.Responses;
 using MediatR;
 
 namespace Billi.Backend.Application.Commands.Auth
 {
-    public class AuthCommand(string email, string password) : IRequest<AuthResponse>
+    public class AuthCommand(string email, string password) : IRequest<Response>
     {
         public string Email { get; } = email;
 
